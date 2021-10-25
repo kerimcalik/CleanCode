@@ -92,6 +92,7 @@ namespace TemizKod
 
     public class Customer: Person
     {
+        
         public int CustomerId { get; set; }
         public string InvoiceNumber { get; set; }
     }
