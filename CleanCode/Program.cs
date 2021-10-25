@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CleanCode;
+using FluentValidation;
+using System;
 
 namespace TemizKod
 {
@@ -38,7 +40,8 @@ namespace TemizKod
 
         static void Main(string[] args)
         {
-            //int number = 0;    
+            /*
+            int number = 0;
 
             Person person2 = new Person();
             person2.FirstName = "Aras";
@@ -55,6 +58,24 @@ namespace TemizKod
             });
             personManager.Add(person2);
             personManager.Add()
+            */
+
+            CustomerManager customerManager = new CustomerManager();
+
+            var customer = new Customer
+            {
+                CityId = 1,
+                FirstName = "      ",
+                //Surname = "yılmaz",
+                IdentityNumber = 222232,
+                InvoiceNumber = "fatura-xsa-1",
+                CustomerId = 1
+            };
+
+            
+
+            customerManager.Add(customer);
+
         }
 
     }
@@ -63,9 +84,16 @@ namespace TemizKod
     public class Person
     {
         public string FirstName { get; set; }
-        public string LastName { get; set; }
+        public string Surname { get; set; }
         public long IdentityNumber { get; set; }
         public short CityId { get; set; }
+        public string GsmNumber { get; set; }
+    }
+
+    public class Customer: Person
+    {
+        public int CustomerId { get; set; }
+        public string InvoiceNumber { get; set; }
     }
 
     public class PersonManager
@@ -79,5 +107,22 @@ namespace TemizKod
         {
             return true;
         }
+    }
+
+    public class CustomerManager
+    {
+        public bool Add(Customer customer)
+        {
+            //CustomerValidate.Validate(customer);
+            CustomerValidate customerValidator = new CustomerValidate();
+            var result = customerValidator.Validate(customer);
+
+            if (result.Errors.Count > 0)
+            {
+                throw new ValidationException(result.Errors);
+            }
+
+            return true;
+        }        
     }
 }
